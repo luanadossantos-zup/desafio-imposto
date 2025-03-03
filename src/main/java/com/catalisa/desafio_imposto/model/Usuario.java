@@ -2,8 +2,6 @@ package com.catalisa.desafio_imposto.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 
 @Entity
 @Table(name = "usuarios")
@@ -17,15 +15,16 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
-    )
-    private Set<Role> roles;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 
 
     public Usuario () {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -44,14 +43,11 @@ public class Usuario {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Roles getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Roles role) {
+        this.role = role;
     }
-
-
-
 }
