@@ -1,9 +1,7 @@
 package com.catalisa.desafio_imposto.controller;
 
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
-import com.catalisa.desafio_imposto.service.ImpostoService;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.catalisa.desafio_imposto.service.ImpostoServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,15 +14,15 @@ import java.util.List;
 @RequestMapping("/tipos")
 public class TipoController {
 
-    private final ImpostoService impostoService;
+    private final ImpostoServiceImpl impostoServiceImpl;
 
-    public TipoController(ImpostoService impostoService) {
-        this.impostoService = impostoService;
+    public TipoController(ImpostoServiceImpl impostoServiceImpl) {
+        this.impostoServiceImpl = impostoServiceImpl;
     }
 
     @GetMapping
     public ResponseEntity<List<ImpostoDto>> listarTodosImpostos() {
-        return ResponseEntity.ok(impostoService.listarTodosImpostos());
+        return ResponseEntity.ok(impostoServiceImpl.listarTodosImpostos());
     }
 
 
