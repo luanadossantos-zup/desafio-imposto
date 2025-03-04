@@ -22,7 +22,21 @@ public class TipoController {
 
     @GetMapping
     public ResponseEntity<List<ImpostoDto>> listarTodosImpostos() {
-        return ResponseEntity.ok(impostoServiceImpl.listarTodosImpostos());
+
+        List<ImpostoDto> impostos = impostoServiceImpl.listarTodosImpostos();
+
+
+        List<ImpostoDto> impostoDtos = impostos.stream()
+                .map(imposto -> new ImpostoDto(
+                        imposto.getId(),
+                        imposto.getNomeImposto(),
+                        imposto.getDescricao(),
+                        imposto.getAliquota()
+                ))
+                .toList();
+
+
+        return ResponseEntity.ok(impostoDtos);
     }
 
 
