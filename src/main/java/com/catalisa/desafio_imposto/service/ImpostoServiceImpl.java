@@ -1,6 +1,8 @@
 package com.catalisa.desafio_imposto.service;
 
 
+import com.catalisa.desafio_imposto.dto.CalculoImpostoRequest;
+import com.catalisa.desafio_imposto.dto.CalculoImpostoResponse;
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
 import com.catalisa.desafio_imposto.infra.jwt.JwtAuthenticationFilter;
 import com.catalisa.desafio_imposto.model.Imposto;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.catalisa.desafio_imposto.model.TipoImposto.*;
 
 
 @Service
@@ -55,17 +59,35 @@ public class ImpostoServiceImpl implements ImpostoService{
     }
 
     @Override
-    public double calcular(TipoImposto tipoImposto, Double valorBase, Double aliquota) {
-        switch (tipoImposto) {
+    public CalculoImpostoResponse calcularImposto(CalculoImpostoRequest request) {
+        // Busca o imposto pelo ID
+        Imposto imposto = impostoRepository.findById(request.getIdImposto())
+                .orElseThrow(() -> new RuntimeException("Imposto não encontrado"));
+
+        // Calcula o valor do imposto com base no tipo
+        double valorImposto;
+        switch (imposto.getNome()) {
             case ICMS:
-                return calcularICMS(valorBase, aliquota);
+                valorImposto = calcularICMS(request.getValorBase(), imposto.getAliquota());
+                break;
             case ISS:
-                return calcularISS(valorBase, aliquota);
+                valorImposto = calcularISS(request.getValorBase(), imposto.getAliquota());
+                break;
             case IPI:
-                return calcularIPI(valorBase, aliquota);
+                valorImposto = calcularIPI(request.getValorBase(), imposto.getAliquota());
+                break;
             default:
                 throw new IllegalArgumentException("Tipo de imposto não suportado");
         }
+
+        // Prepara a resposta
+        CalculoImpostoResponse response = new CalculoImpostoResponse();
+        response.setTipoImposto(imposto.getNome().name());
+        response.setValorBase(request.getValorBase());
+        response.setAliquota(imposto.getAliquota());
+        response.setValorImposto(valorImposto);
+
+        return response;
     }
 
     private double calcularICMS(Double valorBase, Double aliquota) {
