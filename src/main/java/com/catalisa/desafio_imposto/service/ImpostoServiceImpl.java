@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +33,10 @@ public class ImpostoServiceImpl implements ImpostoService{
                 .collect(Collectors.toList());
         impostos.forEach(System.out::println);
         return impostos;
+    }
+
+    public Optional<Imposto> buscarPorId(Long id) {
+        return impostoRepository.findById(id);
     }
 
     public Imposto salvarImposto (Imposto imposto) {
