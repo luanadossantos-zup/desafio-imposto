@@ -33,6 +33,19 @@ public class ImpostoServiceImpl implements ImpostoService{
         return impostoRepository.save(imposto);
     }
 
+    @Override
+    public double calcular(TipoImposto tipoImposto, Double valorBase, Double aliquota) {
+        switch (tipoImposto) {
+            case ICMS:
+                return calcularICMS(valorBase, aliquota);
+            case ISS:
+                return calcularISS(valorBase, aliquota);
+            case IPI:
+                return calcularIPI(valorBase, aliquota);
+            default:
+                throw new IllegalArgumentException("Tipo de imposto não suportado");
+        }
+    }
 
     private double calcularICMS(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
