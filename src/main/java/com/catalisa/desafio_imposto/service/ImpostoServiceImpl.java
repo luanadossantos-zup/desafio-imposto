@@ -38,6 +38,9 @@ public class ImpostoServiceImpl implements ImpostoService{
         return valorBase * (aliquota / 100);
     }
 
+    private double calcularISS(Double valorBase, Double aliquota) {
+        return valorBase * (aliquota / 100);
+    }
 
         CalculoImpostoResponse response = new CalculoImpostoResponse();
         response.setTipoImposto(imposto.getNome().name());
