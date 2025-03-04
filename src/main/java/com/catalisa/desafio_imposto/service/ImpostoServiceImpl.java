@@ -34,7 +34,9 @@ public class ImpostoServiceImpl implements ImpostoService{
     }
 
 
-        Double valorImposto = imposto.getNome().calcular(request.getValorBase(), imposto.getAliquota());
+    private double calcularICMS(Double valorBase, Double aliquota) {
+        return valorBase * (aliquota / 100);
+    }
 
 
         CalculoImpostoResponse response = new CalculoImpostoResponse();
