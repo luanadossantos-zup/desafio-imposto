@@ -74,7 +74,7 @@ public class TipoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarImposto(@PathVariable Long id) {
         impostoServiceImpl.deletar(id);
         return ResponseEntity.noContent().build();
     }
