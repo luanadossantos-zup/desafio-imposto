@@ -55,13 +55,8 @@ public class ImpostoServiceImpl implements ImpostoService{
         return valorBase * (aliquota / 100);
     }
 
-        CalculoImpostoResponse response = new CalculoImpostoResponse();
-        response.setTipoImposto(imposto.getNome().name());
-        response.setValorBase(request.getValorBase());
-        response.setAliquota(imposto.getAliquota());
-        response.setValorImposto(valorImposto);
-
-        return response;
+    private double calcularIPI(Double valorBase, Double aliquota) {
+        return valorBase * (aliquota / 100);
     }
 
 }
