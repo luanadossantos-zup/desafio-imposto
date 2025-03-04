@@ -29,7 +29,7 @@ public class TipoController {
         List<ImpostoDto> impostoDtos = impostos.stream()
                 .map(imposto -> new ImpostoDto(
                         imposto.getId(),
-                        imposto.getNomeImposto(),
+                        imposto.getNome(),
                         imposto.getDescricao(),
                         imposto.getAliquota()
                 ))
