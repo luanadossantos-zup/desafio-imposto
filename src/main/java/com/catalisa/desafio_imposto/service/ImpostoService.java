@@ -9,6 +9,8 @@ public interface ImpostoService {
 
     public List<ImpostoDto> listarTodosImpostos();
 
+    public Optional<Imposto> buscarPorId(Long id);
+
     public void deletar(Long id);
 
     double calcular(TipoImposto tipoImposto, Double valorBase, Double aliquota);
