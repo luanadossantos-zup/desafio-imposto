@@ -29,10 +29,9 @@ public class ImpostoServiceImpl implements ImpostoService{
         return impostos;
     }
 
-    public CalculoImpostoResponse calcularImposto(CalculoImpostoRequest request) {
-
-        Imposto imposto = impostoRepository.findById(request.getIdImposto())
-                .orElseThrow(() -> new RuntimeException("Imposto não encontrado"));
+    public Imposto salvarImposto (Imposto imposto) {
+        return impostoRepository.save(imposto);
+    }
 
 
         Double valorImposto = imposto.getNome().calcular(request.getValorBase(), imposto.getAliquota());
