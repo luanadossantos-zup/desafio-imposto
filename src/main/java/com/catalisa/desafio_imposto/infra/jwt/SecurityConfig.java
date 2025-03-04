@@ -43,6 +43,7 @@ public class SecurityConfig {
                     authorize.requestMatchers("/user/login").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/tipos").authenticated();
                     authorize.requestMatchers(HttpMethod.POST, "/tipos").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.GET, "/tipos/**").authenticated();
                     authorize.requestMatchers(HttpMethod.DELETE, "/tipos/**").hasRole("ADMIN");
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
