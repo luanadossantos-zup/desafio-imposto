@@ -1,6 +1,6 @@
 package com.catalisa.desafio_imposto.model;
 
-public enum Nome {
+public enum TipoImposto implements CalculoImposto{
     ICMS {
         @Override
         public double calcular(Double valorBase, Double aliquota) {
@@ -20,5 +20,4 @@ public enum Nome {
         }
     };
 
-    public abstract double calcular(Double valorBase, Double aliquota);
 }

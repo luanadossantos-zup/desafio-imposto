@@ -14,7 +14,7 @@ public class Imposto {
 
     @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
-    private Nome nome;
+    private TipoImposto nome;
 
     @Column(nullable = false)
     private String descricao;
@@ -34,11 +34,11 @@ public class Imposto {
         this.id = id;
     }
 
-    public Nome getNome() {
+    public TipoImposto getNome() {
         return nome;
     }
 
-    public void setNome(Nome nome) {
+    public void setNome(TipoImposto nome) {
         this.nome = nome;
     }
 

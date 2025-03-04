@@ -1,19 +1,19 @@
 package com.catalisa.desafio_imposto.dto;
 
-import com.catalisa.desafio_imposto.model.Nome;
+import com.catalisa.desafio_imposto.model.TipoImposto;
 
 
 public class ImpostoDto {
 
     private Long id;
 
-    private Nome nome;
+    private TipoImposto nome;
 
     private String descricao;
 
     private Double aliquota;
 
-    public ImpostoDto(Long id, Nome nome, String descricao, Double aliquota) {
+    public ImpostoDto(Long id, TipoImposto nome, String descricao, Double aliquota) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -28,11 +28,11 @@ public class ImpostoDto {
         this.id = id;
     }
 
-    public Nome getNomeImposto() {
+    public TipoImposto getNomeImposto() {
         return nome;
     }
 
-    public void setNomeImposto(Nome nome) {
+    public void setNomeImposto(TipoImposto nome) {
         this.nome = nome;
     }
 
