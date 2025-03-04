@@ -13,6 +13,9 @@ public class ImpostoDto {
 
     private Double aliquota;
 
+    public ImpostoDto() {
+    }
+
     public ImpostoDto(Long id, TipoImposto nome, String descricao, Double aliquota) {
         this.id = id;
         this.nome = nome;
