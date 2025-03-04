@@ -39,6 +39,12 @@ public class TipoController {
         return ResponseEntity.ok(impostoDtos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Imposto>listarImpostoporId(@PathVariable Long id) {
+        Optional<Imposto> imposto = impostoServiceImpl.buscarPorId(id);
+        return imposto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ImpostoDto> cadastrarNovoImposto(@RequestBody ImpostoDto impostoDto) {
