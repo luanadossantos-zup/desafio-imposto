@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private String jwtSecret = "YXNkZmFzZGZhc2RmYXNkZmFzZGZhc2RmYXNkZmFzZGZhc2RmYXNkZmFzZGZhc2Rm";
-    private long jwtExpirationDate = 300000; // 5 minutes
+    private long jwtExpirationDate = 3600000; // 60 minutes
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
