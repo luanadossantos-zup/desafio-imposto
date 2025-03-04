@@ -1,13 +1,9 @@
 package com.catalisa.desafio_imposto.controller;
 
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
-import com.catalisa.desafio_imposto.infra.jwt.JwtAuthenticationFilter;
+import com.catalisa.desafio_imposto.dto.ImpostoInputDto;
 import com.catalisa.desafio_imposto.model.Imposto;
-import com.catalisa.desafio_imposto.model.Usuario;
-import com.catalisa.desafio_imposto.service.ImpostoService;
 import com.catalisa.desafio_imposto.service.ImpostoServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +15,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tipos")
-public class TipoController {
+public class TiposController {
     private final ImpostoServiceImpl impostoServiceImpl;
 
-    public TipoController(ImpostoServiceImpl impostoServiceImpl) {
+    public TiposController(ImpostoServiceImpl impostoServiceImpl) {
         this.impostoServiceImpl = impostoServiceImpl;
     }
 
@@ -53,12 +49,12 @@ public class TipoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ImpostoDto> cadastrarNovoImposto(@RequestBody ImpostoDto impostoDto) {
+    public ResponseEntity<ImpostoDto> cadastrarNovoImposto(@RequestBody ImpostoInputDto impostoInputDto) {
 
         Imposto imposto = new Imposto();
-        imposto.setNome(impostoDto.getNome());
-        imposto.setDescricao(impostoDto.getDescricao());
-        imposto.setAliquota(impostoDto.getAliquota());
+        imposto.setNome(impostoInputDto.getNome());
+        imposto.setDescricao(impostoInputDto.getDescricao());
+        imposto.setAliquota(impostoInputDto.getAliquota());
 
         Imposto impostoSalvo = impostoServiceImpl.salvarImposto(imposto);
 
