@@ -41,10 +41,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers("/user/register").permitAll();
                     authorize.requestMatchers("/user/login").permitAll();
-                    authorize.requestMatchers(HttpMethod.POST, "/signup").permitAll();
-                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-                    authorize.requestMatchers(HttpMethod.GET, "/api/user").authenticated();
-                    authorize.requestMatchers(HttpMethod.GET, "/api/admin").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.GET, "/tipos").authenticated();
+                    authorize.requestMatchers(HttpMethod.POST, "/tipos").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/tipos/**").hasRole("ADMIN");
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 
