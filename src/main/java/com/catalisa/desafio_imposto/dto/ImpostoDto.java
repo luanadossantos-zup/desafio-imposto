@@ -28,7 +28,7 @@ public class ImpostoDto {
         this.id = id;
     }
 
-    public TipoImposto getNomeImposto() {
+    public TipoImposto getNome() {
         return nome;
     }
 
