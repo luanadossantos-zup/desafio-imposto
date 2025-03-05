@@ -6,7 +6,7 @@ import com.catalisa.desafio_imposto.dto.RegisterUserDto;
 import com.catalisa.desafio_imposto.infra.jwt.JwtTokenProvider;
 import com.catalisa.desafio_imposto.model.Usuario;
 import com.catalisa.desafio_imposto.repository.UsuarioRepository;
-import com.catalisa.desafio_imposto.service.UserServiceImpl;
+import com.catalisa.desafio_imposto.service.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,10 +18,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UsuarioController {
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UsuarioServiceImpl userServiceImpl;
 
     @Autowired
     private AuthenticationManager authenticationManager;
