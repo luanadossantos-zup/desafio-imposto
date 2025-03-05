@@ -30,10 +30,6 @@ public class Imposto {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public TipoImposto getNome() {
         return nome;
     }
