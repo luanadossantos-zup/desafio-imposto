@@ -91,20 +91,20 @@ public class ImpostoServiceImpl implements ImpostoService{
     //ICMS
     //Um produto custa R$ 1.000,00 reais e sobre ele incide a alíquota de 18%.
     //Neste caso o valor do ICMS deste produto seria de R$ 180,00, totalizando R$ 1.180,00.
-    private double calcularICMS(Double valorBase, Double aliquota) {
+    public double calcularICMS(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
     }
 
     //ISS
     //Uma empresa de consultoria em Salvador prestando um serviço no valor de R$ 20.000.
     // Com uma alíquota de 2,5%, o valor do ISS será de R$ 500,00 (R$ 20.000 x 2,5%).
-    private double calcularISS(Double valorBase, Double aliquota) {
+    public double calcularISS(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
     }
 
     //IPI
     //Valor do IPI = Base de cálculo x (Alíquota / 100).
-    private double calcularIPI(Double valorBase, Double aliquota) {
+    public double calcularIPI(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
     }
 

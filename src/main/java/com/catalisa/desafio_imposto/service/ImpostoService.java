@@ -10,11 +10,17 @@ import java.util.Optional;
 
 public interface ImpostoService {
 
-    public List<ImpostoDto> listarTodosImpostos();
+    List<ImpostoDto> listarTodosImpostos();
 
-    public Optional<Imposto> buscarPorId(Long id);
+    Optional<Imposto> buscarPorId(Long id);
 
-    public void deletar(Long id);
+    Imposto salvarImposto (Imposto imposto);
 
-    public CalculoImpostoResponse calcularImposto(CalculoImpostoRequest request);
+    void deletar(Long id);
+
+    CalculoImpostoResponse calcularImposto(CalculoImpostoRequest request);
+
+    double calcularICMS(Double valorBase, Double aliquota);
+
+    public double calcularIPI(Double valorBase, Double aliquota);
 }
