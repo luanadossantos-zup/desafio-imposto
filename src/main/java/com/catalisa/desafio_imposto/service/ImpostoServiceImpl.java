@@ -6,7 +6,6 @@ import com.catalisa.desafio_imposto.dto.CalculoImpostoResponse;
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
 import com.catalisa.desafio_imposto.infra.jwt.JwtAuthenticationFilter;
 import com.catalisa.desafio_imposto.model.Imposto;
-import com.catalisa.desafio_imposto.model.TipoImposto;
 import com.catalisa.desafio_imposto.repository.ImpostoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.catalisa.desafio_imposto.model.TipoImposto.*;
 
 
 @Service
@@ -60,11 +58,11 @@ public class ImpostoServiceImpl implements ImpostoService{
 
     @Override
     public CalculoImpostoResponse calcularImposto(CalculoImpostoRequest request) {
-        // Busca o imposto pelo ID
+
         Imposto imposto = impostoRepository.findById(request.getIdImposto())
                 .orElseThrow(() -> new RuntimeException("Imposto não encontrado"));
 
-        // Calcula o valor do imposto com base no tipo
+
         double valorImposto;
         switch (imposto.getNome()) {
             case ICMS:
@@ -80,7 +78,7 @@ public class ImpostoServiceImpl implements ImpostoService{
                 throw new IllegalArgumentException("Tipo de imposto não suportado");
         }
 
-        // Prepara a resposta
+
         CalculoImpostoResponse response = new CalculoImpostoResponse();
         response.setTipoImposto(imposto.getNome().name());
         response.setValorBase(request.getValorBase());
@@ -90,14 +88,22 @@ public class ImpostoServiceImpl implements ImpostoService{
         return response;
     }
 
+    //ICMS
+    //Um produto custa R$ 1.000,00 reais e sobre ele incide a alíquota de 18%.
+    //Neste caso o valor do ICMS deste produto seria de R$ 180,00, totalizando R$ 1.180,00.
     private double calcularICMS(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
     }
 
+    //ISS
+    //Uma empresa de consultoria em Salvador prestando um serviço no valor de R$ 20.000.
+    // Com uma alíquota de 2,5%, o valor do ISS será de R$ 500,00 (R$ 20.000 x 2,5%).
     private double calcularISS(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
     }
 
+    //IPI
+    //Valor do IPI = Base de cálculo x (Alíquota / 100).
     private double calcularIPI(Double valorBase, Double aliquota) {
         return valorBase * (aliquota / 100);
     }
