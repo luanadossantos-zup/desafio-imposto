@@ -93,7 +93,29 @@ class ImpostoServiceImplTest {
     }
 
     @Test
-    void deletar() {
+    void deletarComSucesso() {
+
+        Long id = 1L;
+        when(impostoRepository.existsById(id)).thenReturn(true);
+
+        impostoService.deletar(id);
+
+        verify(impostoRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void deletarComFalha() {
+
+        Long id = 1L;
+        when(impostoRepository.existsById(id)).thenReturn(false);
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            impostoService.deletar(id);
+        });
+
+        assertEquals("Imposto com ID " + id + " não encontrado.", exception.getMessage());
+
+        verify(impostoRepository, never()).deleteById(id);
     }
 
     @Test
