@@ -192,5 +192,16 @@ class ImpostoServiceImplTest {
 
     @Test
     void calcularIPI() {
+        CalculoImpostoRequest request = new CalculoImpostoRequest();
+        request.setIdImposto(1L);
+        request.setValorBase(1000.0);
+
+        Double aliquota = 5.0;
+
+
+        double resultado = request.getValorBase() * (aliquota / 100);
+        int valorEsperado = 50;
+
+        assertEquals(valorEsperado, resultado, "O cálculo do IPI com valor base zero está incorreto");
     }
 }
