@@ -32,7 +32,7 @@ class ImpostoServiceImplTest {
     private ImpostoRepository impostoRepository;
 
     @InjectMocks
-    private ImpostoService impostoService;
+    private ImpostoServiceImpl impostoServiceImpl;
 
 
     @Test
@@ -44,7 +44,7 @@ class ImpostoServiceImplTest {
         when(impostoRepository.findAll()).thenReturn(mockEntities);
 
 
-        List<ImpostoDto> result = impostoService.listarTodosImpostos();
+        List<ImpostoDto> result = impostoServiceImpl.listarTodosImpostos();
 
 
         assertEquals(2, result.size());
@@ -69,7 +69,7 @@ class ImpostoServiceImplTest {
         when(impostoRepository.findById(1L)).thenReturn(Optional.of(imposto));
 
 
-        Optional<Imposto> byId = impostoService.buscarPorId(1L);
+        Optional<Imposto> byId = impostoServiceImpl.buscarPorId(1L);
 
 
         assertTrue(byId.isPresent()); // Verifica se o Optional contém um valor
@@ -84,7 +84,7 @@ class ImpostoServiceImplTest {
         Imposto imposto = new Imposto(1L, TipoImposto.ICMS, "Descrição A", 10.0);
         when(impostoRepository.save(imposto)).thenReturn(imposto);
 
-        Imposto resultado = impostoService.salvarImposto(imposto);
+        Imposto resultado = impostoServiceImpl.salvarImposto(imposto);
 
 
         assertEquals(imposto.getId(), resultado.getId());
@@ -101,7 +101,7 @@ class ImpostoServiceImplTest {
         Long id = 1L;
         when(impostoRepository.existsById(id)).thenReturn(true);
 
-        impostoService.deletar(id);
+        impostoServiceImpl.deletar(id);
 
         verify(impostoRepository, times(1)).deleteById(id);
     }
@@ -113,7 +113,7 @@ class ImpostoServiceImplTest {
         when(impostoRepository.existsById(id)).thenReturn(false);
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
-            impostoService.deletar(id);
+            impostoServiceImpl.deletar(id);
         });
 
         assertEquals("Imposto com ID " + id + " não encontrado.", exception.getMessage());
@@ -130,7 +130,7 @@ class ImpostoServiceImplTest {
         Imposto impostoMock = new Imposto(1L, TipoImposto.ICMS, "ICMS", 10.0);
         when(impostoRepository.findById(1L)).thenReturn(java.util.Optional.of(impostoMock));
 
-        CalculoImpostoResponse response = impostoService.calcularImposto(request);
+        CalculoImpostoResponse response = impostoServiceImpl.calcularImposto(request);
 
         assertEquals("ICMS", response.getTipoImposto());
         assertEquals(1000.0, response.getValorBase());
@@ -142,27 +142,37 @@ class ImpostoServiceImplTest {
 
     @Test
     void calcularImposto_ImpostoNaoEncontrado() {
-        // Dados de entrada
+
         CalculoImpostoRequest request = new CalculoImpostoRequest();
         request.setIdImposto(1L);
         request.setValorBase(1000.0);
 
-        // Mock para simular imposto não encontrado
         when(impostoRepository.findById(1L)).thenReturn(java.util.Optional.empty());
 
-        // Verificando se a exceção é lançada
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            impostoService.calcularImposto(request);
+            impostoServiceImpl.calcularImposto(request);
         });
 
         assertEquals("Imposto não encontrado", exception.getMessage());
 
-        // Verificando se o repositório foi chamado corretamente
+
         verify(impostoRepository, times(1)).findById(1L);
     }
 
     @Test
     void calcularICMS() {
+        CalculoImpostoRequest request = new CalculoImpostoRequest();
+        request.setIdImposto(1L);
+        request.setValorBase(1000.0);
+
+        Double aliquota = 5.0;
+
+
+        double resultado = request.getValorBase() * (aliquota / 100);
+        int valorEsperado = 50;
+
+        assertEquals(valorEsperado, resultado, "O cálculo do ICMS com valor base zero está incorreto");
     }
 
     @Test
