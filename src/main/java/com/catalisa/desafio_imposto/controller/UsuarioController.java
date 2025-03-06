@@ -2,7 +2,7 @@ package com.catalisa.desafio_imposto.controller;
 
 import com.catalisa.desafio_imposto.dto.JwtResponse;
 import com.catalisa.desafio_imposto.dto.LoginDto;
-import com.catalisa.desafio_imposto.dto.RegisterUserDto;
+import com.catalisa.desafio_imposto.dto.CadastrarUsuarioDto;
 import com.catalisa.desafio_imposto.infra.jwt.JwtTokenProvider;
 import com.catalisa.desafio_imposto.model.Usuario;
 import com.catalisa.desafio_imposto.repository.UsuarioRepository;
@@ -33,8 +33,8 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<?> getUserInfo(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario savedUser = userServiceImpl.registerUser(registerUserDto);
+    public ResponseEntity<?> getUserInfo(@RequestBody CadastrarUsuarioDto cadastrarUsuarioDto) {
+        Usuario savedUser = userServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
 
         // Retorna o ID e o username na resposta
         return ResponseEntity.status(201).body(Map.of(

@@ -4,7 +4,7 @@ import com.catalisa.desafio_imposto.model.Roles;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({ "username", "role", "id"})
-public class RegisterUserDto {
+public class CadastrarUsuarioDto {
 
     private String username;
     private String password;

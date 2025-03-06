@@ -1,6 +1,6 @@
 package com.catalisa.desafio_imposto.service;
 
-import com.catalisa.desafio_imposto.dto.RegisterUserDto;
+import com.catalisa.desafio_imposto.dto.CadastrarUsuarioDto;
 import com.catalisa.desafio_imposto.model.Usuario;
 import com.catalisa.desafio_imposto.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +15,21 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Usuario registerUser(RegisterUserDto registerUserDto) {
+    public Usuario cadastraUsuario(CadastrarUsuarioDto cadastrarUsuarioDto) {
 
-        validaExistenciaDoUsuario(registerUserDto);
+        validaExistenciaDoUsuario(cadastrarUsuarioDto);
 
         Usuario usuario = new Usuario();
-        usuario.setUsername(registerUserDto.getUsername());
-        usuario.setPassword(bCryptPasswordEncoder.encode(registerUserDto.getPassword()));
-        usuario.setRole(registerUserDto.getRole());
+        usuario.setUsername(cadastrarUsuarioDto.getUsername());
+        usuario.setPassword(bCryptPasswordEncoder.encode(cadastrarUsuarioDto.getPassword()));
+        usuario.setRole(cadastrarUsuarioDto.getRole());
 
         // Salva o usuário e retorna o objeto salvo
         return usuarioRepository.save(usuario);
     }
 
-    private void validaExistenciaDoUsuario(RegisterUserDto registerUserDto) {
-        if (usuarioRepository.existsByUsername(registerUserDto.getUsername())) {
+    private void validaExistenciaDoUsuario(CadastrarUsuarioDto cadastrarUsuarioDto) {
+        if (usuarioRepository.existsByUsername(cadastrarUsuarioDto.getUsername())) {
             throw new RuntimeException("Unprocess Entity");
         }
     }
