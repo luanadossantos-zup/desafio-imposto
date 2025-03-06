@@ -58,6 +58,26 @@ class UsuarioServiceImplTest {
         verify(usuarioRepository, times(1)).save(any(Usuario.class));
     }
 
+    @Test
+    void validaExistenciaDoUsuario() {
+        // Arrange
+        CadastrarUsuarioDto cadastrarUsuarioDto = new CadastrarUsuarioDto();
+        cadastrarUsuarioDto.setUsername("existingUser");
+        cadastrarUsuarioDto.setPassword("password123");
+        cadastrarUsuarioDto.setRole(Roles.ROLE_USER);
+
+        when(usuarioRepository.existsByUsername("existingUser")).thenReturn(true);
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            usuarioServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
+        });
+
+        assertEquals("Unprocess Entity", exception.getMessage());
+        verify(usuarioRepository, times(1)).existsByUsername("existingUser");
+        verify(usuarioRepository, never()).save(any(Usuario.class));
+    }
+
 
 
 }
