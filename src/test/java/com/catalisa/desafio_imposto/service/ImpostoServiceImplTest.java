@@ -62,6 +62,18 @@ class ImpostoServiceImplTest {
     @Test
     void buscarPorId() {
 
+        Imposto imposto = new Imposto(1L, TipoImposto.ICMS, "Descrição A", 10.0);
+        when(impostoRepository.findById(1L)).thenReturn(Optional.of(imposto));
+
+
+        Optional<Imposto> byId = impostoService.buscarPorId(1L);
+
+
+        assertTrue(byId.isPresent()); // Verifica se o Optional contém um valor
+        assertEquals(TipoImposto.ICMS, byId.get().getNome()); // Verifica o valor do nome
+
+
+        verify(impostoRepository, times(1)).findById(1L);
     }
 
     @Test
