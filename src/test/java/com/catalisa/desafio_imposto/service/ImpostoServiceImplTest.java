@@ -78,6 +78,18 @@ class ImpostoServiceImplTest {
 
     @Test
     void salvarImposto() {
+        Imposto imposto = new Imposto(1L, TipoImposto.ICMS, "Descrição A", 10.0);
+        when(impostoRepository.save(imposto)).thenReturn(imposto);
+
+        Imposto resultado = impostoService.salvarImposto(imposto);
+
+
+        assertEquals(imposto.getId(), resultado.getId());
+        assertEquals(imposto.getNome(), resultado.getNome());
+        assertEquals(imposto.getDescricao(), resultado.getDescricao());
+        assertEquals(imposto.getAliquota(), resultado.getAliquota());
+
+        verify(impostoRepository, times(1)).save(imposto);
     }
 
     @Test
