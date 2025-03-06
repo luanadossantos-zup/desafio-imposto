@@ -1,11 +1,14 @@
 package com.catalisa.desafio_imposto.service;
 
+import com.catalisa.desafio_imposto.dto.CalculoImpostoRequest;
+import com.catalisa.desafio_imposto.dto.CalculoImpostoResponse;
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
 import com.catalisa.desafio_imposto.model.Imposto;
 import com.catalisa.desafio_imposto.model.Roles;
 import com.catalisa.desafio_imposto.model.TipoImposto;
 import com.catalisa.desafio_imposto.repository.ImpostoRepository;
 import com.catalisa.desafio_imposto.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -124,18 +127,35 @@ class ImpostoServiceImplTest {
         request.setIdImposto(1L);
         request.setValorBase(1000.0);
 
-        // Mock do imposto retornado pelo repositório
         Imposto impostoMock = new Imposto(1L, TipoImposto.ICMS, "ICMS", 10.0);
         when(impostoRepository.findById(1L)).thenReturn(java.util.Optional.of(impostoMock));
 
-        // Executando o método a ser testado
         CalculoImpostoResponse response = impostoService.calcularImposto(request);
 
-        // Verificando o resultado
         assertEquals("ICMS", response.getTipoImposto());
         assertEquals(1000.0, response.getValorBase());
         assertEquals(10.0, response.getAliquota());
         assertEquals(100.0, response.getValorImposto()); // 10% de 1000 é 100
+
+        verify(impostoRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void calcularImposto_ImpostoNaoEncontrado() {
+        // Dados de entrada
+        CalculoImpostoRequest request = new CalculoImpostoRequest();
+        request.setIdImposto(1L);
+        request.setValorBase(1000.0);
+
+        // Mock para simular imposto não encontrado
+        when(impostoRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+
+        // Verificando se a exceção é lançada
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            impostoService.calcularImposto(request);
+        });
+
+        assertEquals("Imposto não encontrado", exception.getMessage());
 
         // Verificando se o repositório foi chamado corretamente
         verify(impostoRepository, times(1)).findById(1L);
