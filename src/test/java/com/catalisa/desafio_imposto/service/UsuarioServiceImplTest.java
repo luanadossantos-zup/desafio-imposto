@@ -1,6 +1,6 @@
 package com.catalisa.desafio_imposto.service;
 
-import com.catalisa.desafio_imposto.dto.RegisterUserDto;
+import com.catalisa.desafio_imposto.dto.CadastrarUsuarioDto;
 import com.catalisa.desafio_imposto.model.Roles;
 import com.catalisa.desafio_imposto.model.Usuario;
 import com.catalisa.desafio_imposto.repository.UsuarioRepository;
@@ -29,12 +29,12 @@ class UsuarioServiceImplTest {
 
 
     @Test
-    public void cadastraUsuario() {
+    public void cadastrarUsuario() {
         // Arrange
-        RegisterUserDto registerUserDto = new RegisterUserDto();
-        registerUserDto.setUsername("testUser");
-        registerUserDto.setPassword("password123");
-        registerUserDto.setRole(Roles.ROLE_USER);
+        CadastrarUsuarioDto cadastrarUsuarioDto = new CadastrarUsuarioDto();
+        cadastrarUsuarioDto.setUsername("testUser");
+        cadastrarUsuarioDto.setPassword("password123");
+        cadastrarUsuarioDto.setRole(Roles.ROLE_USER);
 
         Usuario usuarioMock = new Usuario();
         usuarioMock.setUsername("testUser");
@@ -46,7 +46,7 @@ class UsuarioServiceImplTest {
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioMock);
 
         // Act
-        Usuario result = usuarioServiceImpl.cadastraUsuario(registerUserDto);
+        Usuario result = usuarioServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
 
         // Assert
         assertEquals("testUser", result.getUsername(), "The username should match the input.");
