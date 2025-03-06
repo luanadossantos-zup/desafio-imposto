@@ -26,6 +26,13 @@ public class Imposto {
 
     }
 
+    public Imposto(Long id, TipoImposto nome, String descricao, Double aliquota) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.aliquota = aliquota;
+    }
+
     public Long getId() {
         return id;
     }
