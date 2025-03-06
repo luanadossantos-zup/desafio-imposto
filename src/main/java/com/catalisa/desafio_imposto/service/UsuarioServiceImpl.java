@@ -16,9 +16,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Usuario registerUser(RegisterUserDto registerUserDto) {
-        if (usuarioRepository.existsByUsername(registerUserDto.getUsername())) {
-            throw new RuntimeException("Unprocess Entity");
-        }
+
+        validaExistenciaDoUsuario(registerUserDto);
 
         Usuario usuario = new Usuario();
         usuario.setUsername(registerUserDto.getUsername());
@@ -27,5 +26,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         // Salva o usuário e retorna o objeto salvo
         return usuarioRepository.save(usuario);
+    }
+
+    private void validaExistenciaDoUsuario(RegisterUserDto registerUserDto) {
+        if (usuarioRepository.existsByUsername(registerUserDto.getUsername())) {
+            throw new RuntimeException("Unprocess Entity");
+        }
     }
 }
