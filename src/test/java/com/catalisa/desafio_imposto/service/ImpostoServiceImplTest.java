@@ -120,6 +120,25 @@ class ImpostoServiceImplTest {
 
     @Test
     void calcularImposto() {
+        CalculoImpostoRequest request = new CalculoImpostoRequest();
+        request.setIdImposto(1L);
+        request.setValorBase(1000.0);
+
+        // Mock do imposto retornado pelo repositório
+        Imposto impostoMock = new Imposto(1L, TipoImposto.ICMS, "ICMS", 10.0);
+        when(impostoRepository.findById(1L)).thenReturn(java.util.Optional.of(impostoMock));
+
+        // Executando o método a ser testado
+        CalculoImpostoResponse response = impostoService.calcularImposto(request);
+
+        // Verificando o resultado
+        assertEquals("ICMS", response.getTipoImposto());
+        assertEquals(1000.0, response.getValorBase());
+        assertEquals(10.0, response.getAliquota());
+        assertEquals(100.0, response.getValorImposto()); // 10% de 1000 é 100
+
+        // Verificando se o repositório foi chamado corretamente
+        verify(impostoRepository, times(1)).findById(1L);
     }
 
     @Test
