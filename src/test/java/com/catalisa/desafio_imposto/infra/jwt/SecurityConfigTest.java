@@ -25,12 +25,6 @@ class SecurityConfigTest {
     private SecurityConfig securityConfig;
 
     @Mock
-    private UserDetailsService userDetailsService;
-
-    @Mock
-    private JwtAuthenticationEntryPoint authenticationEntryPoint;
-
-    @Mock
     private JwtAuthenticationFilter authenticationFilter;
 
     @Mock
@@ -45,17 +39,14 @@ class SecurityConfigTest {
     void testSecurityFilterChain() throws Exception {
         HttpSecurity httpSecurity = mock(HttpSecurity.class);
 
-
         when(httpSecurity.csrf(any())).thenReturn(httpSecurity);
         when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
         when(httpSecurity.httpBasic(any())).thenReturn(httpSecurity);
         when(httpSecurity.exceptionHandling(any())).thenReturn(httpSecurity);
         when(httpSecurity.addFilterBefore(any(), eq(UsernamePasswordAuthenticationFilter.class))).thenReturn(httpSecurity);
 
-
         securityConfig.securityFilterChain(httpSecurity);
 
-        // Verifica se os métodos do HttpSecurity foram chamados corretamente
         verify(httpSecurity).csrf(any());
         verify(httpSecurity).authorizeHttpRequests(any());
         verify(httpSecurity).httpBasic(any());
@@ -65,7 +56,7 @@ class SecurityConfigTest {
 
     @Test
     void testPasswordEncoder() {
-        // Testando o bean de BCryptPasswordEncoder
+
         BCryptPasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
         assertTrue(passwordEncoder instanceof BCryptPasswordEncoder);
     }
