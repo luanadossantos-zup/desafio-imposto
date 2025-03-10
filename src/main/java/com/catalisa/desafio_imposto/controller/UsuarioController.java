@@ -22,21 +22,27 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioServiceImpl userServiceImpl;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    public UsuarioController(UsuarioServiceImpl userServiceImpl,
+                             AuthenticationManager authenticationManager,
+                             JwtTokenProvider jwtTokenProvider,
+                             UsuarioRepository usuarioRepository) {
+        this.userServiceImpl = userServiceImpl;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> getUserInfo(@RequestBody CadastrarUsuarioDto cadastrarUsuarioDto) {
         Usuario savedUser = userServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
 
-        // Retorna o ID e o username na resposta
         return ResponseEntity.status(201).body(Map.of(
                 "id", savedUser.getId(),
                 "username", savedUser.getUsername(),
