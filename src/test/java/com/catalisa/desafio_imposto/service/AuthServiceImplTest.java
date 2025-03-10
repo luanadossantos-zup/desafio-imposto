@@ -42,5 +42,40 @@ class AuthServiceImplTest {
         Assertions.assertEquals("mockedToken", token, "O token gerado deve ser igual ao esperado.");
     }
 
-    
+    @Test
+    void testLoginUserNotFound() {
+        // Arrange
+        LoginDto loginDto = new LoginDto("nonExistentUser","testPassword");
+
+
+        Mockito.when(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(authentication);
+        Mockito.when(usuarioRepository.findByUsername("nonExistentUser"))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
+            authServiceImpl.login(loginDto);
+        });
+
+        Mockito.verify(authenticationManager).authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class));
+        Mockito.verify(usuarioRepository).findByUsername("nonExistentUser");
+        Assertions.assertEquals("Usuário não encontrado", exception.getMessage(), "A mensagem de erro deve ser 'Usuário não encontrado'.");
+    }
+
+    @Test
+    void testLoginAuthenticationError() {
+        // Arrange
+        LoginDto loginDto = new LoginDto("testUser", "wrongPassword");
+        Mockito.when(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
+                .thenThrow(new RuntimeException("Erro ao autenticar"));
+
+        // Act & Assert
+        RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
+            authServiceImpl.login(loginDto);
+        });
+
+        Mockito.verify(authenticationManager).authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class));
+        Assertions.assertEquals("Erro ao autenticar", exception.getMessage(), "A mensagem de erro deve ser 'Erro ao autenticar'.");
+    }
 }
