@@ -22,5 +22,7 @@ public interface ImpostoService {
 
     double calcularICMS(Double valorBase, Double aliquota);
 
-    public double calcularIPI(Double valorBase, Double aliquota);
+    double calcularISS(Double valorBase, Double aliquota);
+
+    double calcularIPI(Double valorBase, Double aliquota);
 }
