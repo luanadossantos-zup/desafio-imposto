@@ -32,7 +32,6 @@ public class AuthServiceImpl implements AuthService{
                             loginDto.getPassword()
                     )
             );
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             Usuario usuario = usuarioRepositoryRepository
@@ -40,10 +39,13 @@ public class AuthServiceImpl implements AuthService{
                     .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
             String token = jwtTokenProvider.generateToken(authentication);
-
             return token;
         } catch (UsernameNotFoundException e) {
+
             throw e;
+        } catch (RuntimeException e) {
+
+            throw new RuntimeException(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             throw new AuthenticationException("Erro ao autenticar o usuário");
