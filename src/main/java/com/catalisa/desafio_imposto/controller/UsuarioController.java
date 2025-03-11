@@ -41,8 +41,12 @@ public class UsuarioController {
 
     @PostMapping("/register")
     public ResponseEntity<?> getUserInfo(@RequestBody CadastrarUsuarioDto cadastrarUsuarioDto) {
-        Usuario savedUser = userServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
 
+        if (usuarioRepository.findByUsername(cadastrarUsuarioDto.getUsername()).isPresent()) {
+            return ResponseEntity.status(400).body(Map.of("error", "Username já está em uso"));
+        }
+
+        Usuario savedUser = userServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
         return ResponseEntity.status(201).body(Map.of(
                 "id", savedUser.getId(),
                 "username", savedUser.getUsername(),
@@ -52,20 +56,35 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()
-                )
-        );
+
+        if (loginDto.getUsername() == null || loginDto.getUsername().isEmpty()) {
+            return ResponseEntity.status(400).body(Map.of("error", "O campo username é obrigatório"));
+        }
 
 
-        Usuario usuario = usuarioRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if (loginDto.getPassword() == null || loginDto.getPassword().isEmpty()) {
+            return ResponseEntity.status(400).body(Map.of("error", "O campo senha é obrigatório"));
+        }
+
+        try {
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDto.getUsername(),
+                            loginDto.getPassword()
+                    )
+            );
 
 
-        String token = jwtTokenProvider.generateToken(authentication);
+            Usuario usuario = usuarioRepository.findByUsername(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        return ResponseEntity.ok(new JwtResponse(token));
+
+            String token = jwtTokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(token));
+        } catch (Exception e) {
+
+            return ResponseEntity.status(401).body(Map.of("error", "Credenciais inválidas"));
+        }
     }
 }
