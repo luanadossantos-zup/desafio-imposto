@@ -49,7 +49,20 @@ public class TiposController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ImpostoDto> cadastrarNovoImposto(@RequestBody ImpostoInputDto impostoInputDto) {
+    public ResponseEntity<?> cadastrarNovoImposto(@RequestBody ImpostoInputDto impostoInputDto) {
+
+
+        if (impostoInputDto.getNome() == null ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome do imposto é obrigatório.");
+        }
+
+        if (impostoInputDto.getAliquota() == null || impostoInputDto.getAliquota() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A alíquota deve ser maior que zero.");
+        }
+
+        if (impostoInputDto.getDescricao() == null || impostoInputDto.getDescricao().length() > 255) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A descrição é obrigatória e deve ter no máximo 255 caracteres.");
+        }
 
         Imposto imposto = new Imposto();
         imposto.setNome(impostoInputDto.getNome());
