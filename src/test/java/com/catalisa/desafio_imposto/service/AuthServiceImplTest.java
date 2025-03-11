@@ -1,4 +1,23 @@
-import static org.junit.jupiter.api.Assertions.*;
+package com.catalisa.desafio_imposto.service;
+
+import com.catalisa.desafio_imposto.dto.LoginDto;
+import com.catalisa.desafio_imposto.infra.jwt.JwtTokenProvider;
+import com.catalisa.desafio_imposto.model.Usuario;
+import com.catalisa.desafio_imposto.repository.UsuarioRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
 
     @InjectMocks
@@ -18,7 +37,7 @@ class AuthServiceImplTest {
 
 
     @Test
-    void testLoginSuccess() {
+    void login_Sucesso() {
         // Arrange
         LoginDto loginDto = new LoginDto("testUser","testPassword");
 
@@ -43,7 +62,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void testLoginUserNotFound() {
+    void login_usuarioNaoEncontrado() {
         // Arrange
         LoginDto loginDto = new LoginDto("nonExistentUser","testPassword");
 
@@ -64,7 +83,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void testLoginAuthenticationError() {
+    void login_ErroDeAutenticacao() {
         // Arrange
         LoginDto loginDto = new LoginDto("testUser", "wrongPassword");
         Mockito.when(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
