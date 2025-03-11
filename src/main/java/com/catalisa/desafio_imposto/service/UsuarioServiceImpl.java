@@ -30,7 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private void validaExistenciaDoUsuario(CadastrarUsuarioDto cadastrarUsuarioDto) {
         if (usuarioRepository.existsByUsername(cadastrarUsuarioDto.getUsername())) {
-            throw new RuntimeException("Unprocess Entity");
+            throw new UsernameNotFoundException("Usuario não encontrado!");
         }
     }
 }
