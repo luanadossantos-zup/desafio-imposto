@@ -14,16 +14,13 @@ public class Imposto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O nome é obrigatório")
     @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
     private TipoImposto nome;
 
-    @NotBlank(message = "A descrição é obrigatória")
     @Column(nullable = false)
     private String descricao;
 
-    @Min(value = 0, message = "A alíquota não deve estar em branco!")
     @Column(nullable = false)
     private Double aliquota;
 

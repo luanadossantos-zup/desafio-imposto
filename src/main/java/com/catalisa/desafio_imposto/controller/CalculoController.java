@@ -22,12 +22,9 @@ public class CalculoController {
     @PostMapping
     public ResponseEntity<CalculoImpostoResponse> calcularImposto(@RequestBody CalculoImpostoRequest request) {
         try {
-            // Chama o serviço para calcular o imposto
             CalculoImpostoResponse response = impostoServiceImpl.calcularImposto(request);
-            // Retorna o resultado com status 200 (OK)
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            // Retorna um erro com status 404 (Not Found) ou outro status apropriado
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }

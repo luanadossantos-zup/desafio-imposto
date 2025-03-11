@@ -26,7 +26,7 @@ class CustomUserDetailsServiceImplTest {
     private CustomUserDetailsServiceImpl customUserDetailsService;
 
     @Test
-    void loadUserByUsername_Success() {
+    void carregarUsuarioPeloNome_Sucesso() {
         String username = "testUser";
         String password = "testPassword";
         Roles role = Roles.ROLE_USER;
@@ -49,7 +49,7 @@ class CustomUserDetailsServiceImplTest {
     }
 
     @Test
-    public void testLoadUserByUsername_UserNotFound() {
+    public void carregarUsuarioPeloNome_UsuarioNaoEncontrado() {
 
         String username = "nonExistentUser";
         when(usuarioRepository.findByUsername(username)).thenReturn(Optional.empty());

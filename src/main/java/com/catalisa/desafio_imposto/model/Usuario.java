@@ -12,15 +12,13 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O nome é obrigatório.")
+
     @Column(nullable = false, unique = true)
     private String username;
 
-    @NotBlank(message = "A senha é obrigatória")
     @Column(nullable = false)
     private String password;
 
-    @NotBlank(message = "Roles deve ser ROLE_USER ou ROLE_ADMIN")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Roles role;

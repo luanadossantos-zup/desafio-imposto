@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -24,9 +25,7 @@ public class TiposController {
 
     @GetMapping
     public ResponseEntity<List<ImpostoDto>> listarTodosImpostos() {
-
         List<ImpostoDto> impostos = impostoServiceImpl.listarTodosImpostos();
-
 
         List<ImpostoDto> impostoDtos = impostos.stream()
                 .map(imposto -> new ImpostoDto(
@@ -37,14 +36,14 @@ public class TiposController {
                 ))
                 .toList();
 
-
         return ResponseEntity.ok(impostoDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Imposto>listarImpostoporId(@PathVariable Long id) {
+    public ResponseEntity<Imposto> listarImpostoporId(@PathVariable Long id) {
         Optional<Imposto> imposto = impostoServiceImpl.buscarPorId(id);
-        return imposto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return imposto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -52,7 +51,7 @@ public class TiposController {
     public ResponseEntity<?> cadastrarNovoImposto(@RequestBody ImpostoInputDto impostoInputDto) {
 
 
-        if (impostoInputDto.getNome() == null ) {
+        if (impostoInputDto.getNome() == null || impostoInputDto.getNome().toString().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome do imposto é obrigatório.");
         }
 
@@ -60,11 +59,12 @@ public class TiposController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A alíquota deve ser maior que zero.");
         }
 
-        if (impostoInputDto.getDescricao() == null || impostoInputDto.getDescricao().length() > 255) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A descrição é obrigatória e deve ter no máximo 255 caracteres.");
+        if (impostoInputDto.getDescricao() == null || impostoInputDto.getDescricao().length() > 100) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A descrição é obrigatória e deve ter no máximo 100 caracteres.");
         }
 
         Imposto imposto = new Imposto();
+
         imposto.setNome(impostoInputDto.getNome());
         imposto.setDescricao(impostoInputDto.getDescricao());
         imposto.setAliquota(impostoInputDto.getAliquota());
@@ -83,9 +83,13 @@ public class TiposController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarImposto(@PathVariable Long id) {
+    public ResponseEntity<?> deletarImposto(@PathVariable Long id) {
+
+        if (impostoServiceImpl.buscarPorId(id).isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("error", "ID não encontrado"));
+        }
+
         impostoServiceImpl.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 }

@@ -2,10 +2,13 @@ package com.catalisa.desafio_imposto.dto;
 
 import com.catalisa.desafio_imposto.model.TipoImposto;
 
+
 public class ImpostoInputDto {
 
     private TipoImposto nome;
+
     private String descricao;
+
     private Double aliquota;
 
     public ImpostoInputDto() {
