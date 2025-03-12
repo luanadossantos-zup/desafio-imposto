@@ -73,7 +73,7 @@ class UsuarioServiceImplTest {
             usuarioServiceImpl.cadastraUsuario(cadastrarUsuarioDto);
         });
 
-        assertEquals("Unprocess Entity", exception.getMessage());
+        assertEquals("Usuario não encontrado!", exception.getMessage());
         verify(usuarioRepository, times(1)).existsByUsername("existingUser");
         verify(usuarioRepository, never()).save(any(Usuario.class));
     }
