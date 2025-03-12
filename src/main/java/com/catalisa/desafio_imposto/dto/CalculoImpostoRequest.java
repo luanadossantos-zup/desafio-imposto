@@ -9,6 +9,8 @@ public class CalculoImpostoRequest {
         return idImposto;
     }
 
+
+
     public void setIdImposto(Long idImposto) {
         this.idImposto = idImposto;
     }
