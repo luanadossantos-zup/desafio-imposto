@@ -102,4 +102,55 @@ class TiposControllerTest {
         assertNull(response.getBody());
     }
 
+    @Test
+    void cadastrarNovoImposto_DeveRetornarCreatedQuandoDadosValidos() {
+        ImpostoInputDto inputDto = new ImpostoInputDto();
+        inputDto.setNome(TipoImposto.IPI);
+        inputDto.setDescricao("Descrição válida");
+        inputDto.setAliquota(10.0);
+
+        Imposto imposto = new Imposto();
+        imposto.setId(1L);
+        imposto.setNome(inputDto.getNome());
+        imposto.setDescricao(inputDto.getDescricao());
+        imposto.setAliquota(inputDto.getAliquota());
+
+        Mockito.when(impostoServiceImpl.salvarImposto(Mockito.any(Imposto.class))).thenReturn(imposto);
+
+        ResponseEntity<?> response = tiposController.cadastrarNovoImposto(inputDto);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        ImpostoDto responseBody = (ImpostoDto) response.getBody();
+        assertEquals(imposto.getId(), responseBody.getId());
+        assertEquals(imposto.getNome(), responseBody.getNome());
+    }
+
+    @Test
+    void cadastrarNovoImposto_DeveRetornarBadRequestQuandoNomeForNulo() {
+        ImpostoInputDto inputDto = new ImpostoInputDto();
+        inputDto.setNome(null);
+        inputDto.setDescricao("Descrição válida");
+        inputDto.setAliquota(10.0);
+
+        ResponseEntity<?> response = tiposController.cadastrarNovoImposto(inputDto);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("O nome do imposto é obrigatório.", response.getBody());
+    }
+
+    @Test
+    void cadastrarNovoImposto_DeveRetornarBadRequestQuandoAliquotaForInvalida() {
+        ImpostoInputDto inputDto = new ImpostoInputDto();
+        inputDto.setNome(TipoImposto.IPI);
+        inputDto.setDescricao("Descrição válida");
+        inputDto.setAliquota(0.0);
+
+        ResponseEntity<?> response = tiposController.cadastrarNovoImposto(inputDto);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("A alíquota deve ser maior que zero.", response.getBody());
+    }
+
+
+
 }
