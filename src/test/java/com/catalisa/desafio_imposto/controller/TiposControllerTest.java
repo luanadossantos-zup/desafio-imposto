@@ -90,5 +90,16 @@ class TiposControllerTest {
         assertEquals(imposto, response.getBody());
     }
 
+    @Test
+    void listarImpostoporId_DeveRetornarNotFoundQuandoIdNaoExistir() {
+        Long id = 1L;
+
+        Mockito.when(impostoServiceImpl.buscarPorId(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<Imposto> response = tiposController.listarImpostoporId(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 
 }
