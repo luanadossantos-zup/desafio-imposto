@@ -1,8 +1,8 @@
 package com.catalisa.desafio_imposto.controller;
 
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import com.catalisa.desafio_imposto.dto.ImpostoInputDto;
 import com.catalisa.desafio_imposto.model.Imposto;
 import com.catalisa.desafio_imposto.model.TipoImposto;
 import com.catalisa.desafio_imposto.service.ImpostoServiceImpl;
@@ -10,18 +10,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class TiposControllerTest {
 
@@ -152,5 +151,28 @@ class TiposControllerTest {
     }
 
 
+    @Test
+    void deletarImposto_DeveRetornarNoContentQuandoIdExistir() {
+        Long id = 1L;
 
+        Mockito.when(impostoServiceImpl.buscarPorId(id)).thenReturn(Optional.of(new Imposto()));
+
+        ResponseEntity<?> response = tiposController.deletarImposto(id);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        Mockito.verify(impostoServiceImpl, Mockito.times(1)).deletar(id);
+    }
+
+    @Test
+    void deletarImposto_DeveRetornarNotFoundQuandoIdNaoExistir() {
+        Long id = 1L;
+
+        Mockito.when(impostoServiceImpl.buscarPorId(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<?> response = tiposController.deletarImposto(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(Map.of("error", "ID não encontrado"), response.getBody());
+        Mockito.verify(impostoServiceImpl, Mockito.never()).deletar(id);
+    }
 }
