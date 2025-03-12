@@ -75,6 +75,20 @@ class TiposControllerTest {
         assertEquals(404, response.getStatusCodeValue());
     }
 
+    @Test
+    void listarImpostoporId_DeveRetornarImpostoQuandoIdExistir() {
+        Long id = 1L;
+        Imposto imposto = new Imposto();
+        imposto.setId(id);
+        imposto.setNome(TipoImposto.ISS);
+
+        Mockito.when(impostoServiceImpl.buscarPorId(id)).thenReturn(Optional.of(imposto));
+
+        ResponseEntity<Imposto> response = tiposController.listarImpostoporId(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(imposto, response.getBody());
+    }
 
 
 }
