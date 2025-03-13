@@ -51,34 +51,25 @@ public class TiposController {
     public ResponseEntity<?> cadastrarNovoImposto(@RequestBody ImpostoInputDto impostoInputDto) {
 
 
-        if (impostoInputDto.getNome() == null || impostoInputDto.getNome().toString().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O nome do imposto é obrigatório.");
+        try {
+            Imposto imposto = new Imposto();
+            imposto.setNome(impostoInputDto.getNome());
+            imposto.setDescricao(impostoInputDto.getDescricao());
+            imposto.setAliquota(impostoInputDto.getAliquota());
+
+            Imposto impostoSalvo = impostoServiceImpl.salvarImposto(imposto);
+
+            ImpostoDto impostoSalvoDto = new ImpostoDto(
+                    impostoSalvo.getId(),
+                    impostoSalvo.getNome(),
+                    impostoSalvo.getDescricao(),
+                    impostoSalvo.getAliquota()
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(impostoSalvoDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-        if (impostoInputDto.getAliquota() == null || impostoInputDto.getAliquota() <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A alíquota deve ser maior que zero.");
-        }
-
-        if (impostoInputDto.getDescricao() == null || impostoInputDto.getDescricao().length() > 100) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A descrição é obrigatória e deve ter no máximo 100 caracteres.");
-        }
-
-        Imposto imposto = new Imposto();
-
-        imposto.setNome(impostoInputDto.getNome());
-        imposto.setDescricao(impostoInputDto.getDescricao());
-        imposto.setAliquota(impostoInputDto.getAliquota());
-
-        Imposto impostoSalvo = impostoServiceImpl.salvarImposto(imposto);
-
-        ImpostoDto impostoSalvoDto = new ImpostoDto(
-                impostoSalvo.getId(),
-                impostoSalvo.getNome(),
-                impostoSalvo.getDescricao(),
-                impostoSalvo.getAliquota()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(impostoSalvoDto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

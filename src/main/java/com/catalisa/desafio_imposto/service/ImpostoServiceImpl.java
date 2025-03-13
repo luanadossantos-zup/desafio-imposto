@@ -42,7 +42,22 @@ public class ImpostoServiceImpl implements ImpostoService{
     }
 
     public Imposto salvarImposto (Imposto imposto) {
+        validarImposto(imposto);
         return impostoRepository.save(imposto);
+    }
+
+    private void validarImposto(Imposto imposto) {
+        if (imposto.getNome() == null || imposto.getNome().name().isEmpty()) {
+            throw new IllegalArgumentException("O nome do imposto é obrigatório.");
+        }
+
+        if (imposto.getAliquota() == null || imposto.getAliquota() <= 0) {
+            throw new IllegalArgumentException("A alíquota deve ser maior que zero.");
+        }
+
+        if (imposto.getDescricao() == null || imposto.getDescricao().length() > 100) {
+            throw new IllegalArgumentException("A descrição é obrigatória e deve ter no máximo 100 caracteres.");
+        }
     }
 
     @Override
