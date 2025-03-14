@@ -7,11 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,14 +32,17 @@ class SecurityConfigTest {
     @Mock
     private AuthenticationConfiguration authenticationConfiguration;
 
+    private HttpSecurity httpSecurity;
+
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        httpSecurity = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
     }
 
     @Test
     void testSecurityFilterChain() throws Exception {
-        HttpSecurity httpSecurity = mock(HttpSecurity.class);
 
         when(httpSecurity.csrf(any())).thenReturn(httpSecurity);
         when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
@@ -45,18 +50,20 @@ class SecurityConfigTest {
         when(httpSecurity.exceptionHandling(any())).thenReturn(httpSecurity);
         when(httpSecurity.addFilterBefore(any(), eq(UsernamePasswordAuthenticationFilter.class))).thenReturn(httpSecurity);
 
-        securityConfig.securityFilterChain(httpSecurity);
+        SecurityFilterChain filterChain = securityConfig.securityFilterChain(httpSecurity);
 
         verify(httpSecurity).csrf(any());
         verify(httpSecurity).authorizeHttpRequests(any());
         verify(httpSecurity).httpBasic(any());
         verify(httpSecurity).exceptionHandling(any());
         verify(httpSecurity).addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        assertTrue(filterChain != null);
     }
 
     @Test
     void testPasswordEncoder() {
-
+        // Testando o bean de BCryptPasswordEncoder
         BCryptPasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
         assertTrue(passwordEncoder instanceof BCryptPasswordEncoder);
     }
@@ -70,6 +77,7 @@ class SecurityConfigTest {
         AuthenticationManager result = securityConfig.authenticationManager(authenticationConfiguration);
 
         verify(authenticationConfiguration).getAuthenticationManager();
+
         assertEquals(authenticationManager, result);
     }
 }

@@ -4,10 +4,8 @@ import com.catalisa.desafio_imposto.dto.CalculoImpostoRequest;
 import com.catalisa.desafio_imposto.dto.CalculoImpostoResponse;
 import com.catalisa.desafio_imposto.dto.ImpostoDto;
 import com.catalisa.desafio_imposto.model.Imposto;
-import com.catalisa.desafio_imposto.model.Roles;
 import com.catalisa.desafio_imposto.model.TipoImposto;
 import com.catalisa.desafio_imposto.repository.ImpostoRepository;
-import com.catalisa.desafio_imposto.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,14 +16,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ImpostoServiceImplTest {
-
 
 
     @Mock
@@ -93,6 +89,65 @@ class ImpostoServiceImplTest {
         assertEquals(imposto.getAliquota(), resultado.getAliquota());
 
         verify(impostoRepository, times(1)).save(imposto);
+    }
+
+    @Test
+    void testValidarImposto_NomeNulo() {
+        Imposto imposto = new Imposto(1L,null, "Descrição válida", 18.00);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> impostoServiceImpl.validarImposto(imposto));
+
+
+        assertTrue(exception.getMessage().contains("O nome do imposto é obrigatório."));
+    }
+
+    @Test
+    void testValidarImposto_AliquotaNula() {
+        Imposto imposto = new Imposto(1L,TipoImposto.ICMS, "Descrição válida", null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> impostoServiceImpl.validarImposto(imposto));
+
+        assertTrue(exception.getMessage().contains("A alíquota deve ser maior que zero."));
+    }
+
+    @Test
+    void testValidarImposto_AliquotaInvalida() {
+        Imposto imposto = new Imposto(1L,TipoImposto.ICMS, null, -18.0);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> impostoServiceImpl.validarImposto(imposto));
+
+        assertTrue(exception.getMessage().contains("A alíquota deve ser maior que zero."));
+    }
+
+    @Test
+    void testValidarImposto_DescricaoNula() {
+        Imposto imposto = new Imposto(1L,TipoImposto.ICMS, null, 18.0);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> impostoServiceImpl.validarImposto(imposto));
+
+        assertTrue(exception.getMessage().contains("A descrição é obrigatória e deve ter no máximo 100 caracteres."));
+    }
+
+    @Test
+    void testValidarImposto_DescricaoMuitoLonga() {
+        String descricaoLonga = "a".repeat(101);
+        Imposto imposto = new Imposto(1L,TipoImposto.ICMS, descricaoLonga, 18.0);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> impostoServiceImpl.validarImposto(imposto));
+
+        assertTrue(exception.getMessage().contains("A descrição é obrigatória e deve ter no máximo 100 caracteres."));
+    }
+
+    @Test
+    void testValidarImposto_Valido() {
+        Imposto imposto = new Imposto(1L,TipoImposto.ICMS, "Descrição válida", 18.0);
+
+        impostoServiceImpl.validarImposto(imposto);
     }
 
     @Test

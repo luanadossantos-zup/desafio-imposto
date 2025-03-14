@@ -41,7 +41,6 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_DeveRetornarUsernameCorreto() {
-        // Arrange
         String username = "testUser";
         Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
@@ -50,16 +49,13 @@ class JwtTokenProviderTest {
 
         String token = jwtTokenProvider.generateToken(authentication);
 
-        // Act
         String extractedUsername = jwtTokenProvider.getUsername(token);
 
-        // Assert
         assertEquals(username, extractedUsername);
     }
 
     @Test
     void validateToken_DeveRetornarTrueParaTokenValido() {
-        // Arrange
         String username = "testUser";
         Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
@@ -68,10 +64,8 @@ class JwtTokenProviderTest {
 
         String token = jwtTokenProvider.generateToken(authentication);
 
-        // Act
         boolean isValid = jwtTokenProvider.validateToken(token);
 
-        // Assert
         assertTrue(isValid);
     }
 

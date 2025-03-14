@@ -54,7 +54,7 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void testRegister_UsernameAlreadyExists() throws Exception {
+    void testRegister_UsernameJaExiste() throws Exception {
         CadastrarUsuarioDto cadastrarUsuarioDto = new CadastrarUsuarioDto();
         cadastrarUsuarioDto.setUsername("existinguser");
         cadastrarUsuarioDto.setPassword("password");
@@ -74,7 +74,7 @@ class UsuarioControllerTest {
 
 
     @Test
-    void testLogin_UsernameNotProvided() throws Exception {
+    void testLogin_UsernameEmBranco() throws Exception {
         LoginDto loginDto = new LoginDto(null, "password");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/login")
@@ -85,7 +85,7 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void testLogin_PasswordNotProvided() throws Exception {
+    void testLogin_SenhaEmBranco() throws Exception {
         LoginDto loginDto = new LoginDto("testuser", null);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/login")
@@ -96,7 +96,7 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void testLogin_InvalidCredentials() throws Exception {
+    void testLogin_CredenciaisInvalidas() throws Exception {
         LoginDto loginDto = new LoginDto("testuser", "wrongpassword");
 
         Mockito.when(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))

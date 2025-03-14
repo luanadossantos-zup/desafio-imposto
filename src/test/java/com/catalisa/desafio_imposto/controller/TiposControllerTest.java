@@ -37,40 +37,29 @@ class TiposControllerTest {
 
     @Test
     void listarTodosImpostos_DeveRetornarListaDeImpostos() {
-
-        // Mock dos dados retornados pelo serviço
         ImpostoDto imposto1 = new ImpostoDto(1L, TipoImposto.IPI, "Descrição A", 10.0);
         ImpostoDto imposto2 = new ImpostoDto(2L, TipoImposto.ISS, "Descrição B", 15.0);
         List<ImpostoDto> mockImpostos = List.of(imposto1, imposto2);
 
-        // Configura o comportamento do mock
         when(impostoServiceImpl.listarTodosImpostos()).thenReturn(mockImpostos);
 
-        // Chama o método do controller
         ResponseEntity<List<ImpostoDto>> response = tiposController.listarTodosImpostos();
 
-        // Verifica o status da resposta
         assertEquals(200, response.getStatusCodeValue());
 
-
-        // Verifica os valores específicos dos objetos na lista
         assertEquals(TipoImposto.IPI, response.getBody().get(0).getNome());
         assertEquals(TipoImposto.ISS, response.getBody().get(1).getNome());
 
-        // Verifica se o método do serviço foi chamado
         verify(impostoServiceImpl, times(1)).listarTodosImpostos();
     }
 
     @Test
     void deveRetornarNotFoundQuandoImpostoNaoForEncontrado() {
-        // Configurando o mock para retornar Optional.empty() quando o ID não for encontrado
         Long idNaoExistente = 1L;
         when(impostoServiceImpl.buscarPorId(idNaoExistente)).thenReturn(Optional.empty());
 
-        // Chama o método do controller
         ResponseEntity<Imposto> response = tiposController.listarImpostoporId(idNaoExistente);
 
-        // Verifica o status da resposta
         assertEquals(404, response.getStatusCodeValue());
     }
 
@@ -123,33 +112,6 @@ class TiposControllerTest {
         assertEquals(imposto.getId(), responseBody.getId());
         assertEquals(imposto.getNome(), responseBody.getNome());
     }
-
-    @Test
-    void cadastrarNovoImposto_DeveRetornarBadRequestQuandoNomeForNulo() {
-        ImpostoInputDto inputDto = new ImpostoInputDto();
-        inputDto.setNome(null);
-        inputDto.setDescricao("Descrição válida");
-        inputDto.setAliquota(10.0);
-
-        ResponseEntity<?> response = tiposController.cadastrarNovoImposto(inputDto);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("O nome do imposto é obrigatório.", response.getBody());
-    }
-
-    @Test
-    void cadastrarNovoImposto_DeveRetornarBadRequestQuandoAliquotaForInvalida() {
-        ImpostoInputDto inputDto = new ImpostoInputDto();
-        inputDto.setNome(TipoImposto.IPI);
-        inputDto.setDescricao("Descrição válida");
-        inputDto.setAliquota(0.0);
-
-        ResponseEntity<?> response = tiposController.cadastrarNovoImposto(inputDto);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("A alíquota deve ser maior que zero.", response.getBody());
-    }
-
 
     @Test
     void deletarImposto_DeveRetornarNoContentQuandoIdExistir() {

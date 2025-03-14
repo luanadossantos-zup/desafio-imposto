@@ -25,7 +25,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setPassword(bCryptPasswordEncoder.encode(cadastrarUsuarioDto.getPassword()));
         usuario.setRole(cadastrarUsuarioDto.getRole());
 
-        // Salva o usuário e retorna o objeto salvo
         return usuarioRepository.save(usuario);
     }
 

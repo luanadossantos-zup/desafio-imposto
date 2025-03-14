@@ -23,13 +23,11 @@ public class JwtTokenProvider {
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
 
-        // Extract roles from the authentication object
         String roles = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // Add custom claim "department"
         String token = Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles)
@@ -53,7 +51,7 @@ public class JwtTokenProvider {
                 .getBody()
                 .getSubject();
     }
-    // Validate JWT token
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()

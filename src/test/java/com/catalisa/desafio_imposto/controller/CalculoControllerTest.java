@@ -2,7 +2,6 @@ package com.catalisa.desafio_imposto.controller;
 
 import com.catalisa.desafio_imposto.dto.CalculoImpostoRequest;
 import com.catalisa.desafio_imposto.dto.CalculoImpostoResponse;
-import com.catalisa.desafio_imposto.model.TipoImposto;
 import com.catalisa.desafio_imposto.service.ImpostoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,10 +35,8 @@ class CalculoControllerTest {
 
         Mockito.when(impostoServiceImpl.calcularImposto(request)).thenReturn(responseMock);
 
-        // Act
         ResponseEntity<CalculoImpostoResponse> response = calculoController.calcularImposto(request);
 
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(responseMock, response.getBody());
         assertEquals(100.0, response.getBody().getValorImposto());

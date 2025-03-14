@@ -38,7 +38,7 @@ class AuthServiceImplTest {
 
     @Test
     void login_Sucesso() {
-        // Arrange
+
         LoginDto loginDto = new LoginDto("testUser","testPassword");
 
         Usuario usuario = new Usuario();
@@ -51,10 +51,9 @@ class AuthServiceImplTest {
         Mockito.when(jwtTokenProvider.generateToken(authentication))
                 .thenReturn("mockedToken");
 
-        // Act
+
         String token = authServiceImpl.login(loginDto);
 
-        // Assert
         Mockito.verify(authenticationManager).authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class));
         Mockito.verify(usuarioRepository).findByUsername("testUser");
         Mockito.verify(jwtTokenProvider).generateToken(authentication);
@@ -63,7 +62,7 @@ class AuthServiceImplTest {
 
     @Test
     void login_usuarioNaoEncontrado() {
-        // Arrange
+
         LoginDto loginDto = new LoginDto("nonExistentUser","testPassword");
 
 
@@ -72,7 +71,7 @@ class AuthServiceImplTest {
         Mockito.when(usuarioRepository.findByUsername("nonExistentUser"))
                 .thenReturn(Optional.empty());
 
-        // Act & Assert
+
         RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
             authServiceImpl.login(loginDto);
         });
@@ -84,12 +83,11 @@ class AuthServiceImplTest {
 
     @Test
     void login_ErroDeAutenticacao() {
-        // Arrange
+
         LoginDto loginDto = new LoginDto("testUser", "wrongPassword");
         Mockito.when(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new RuntimeException("Erro ao autenticar"));
 
-        // Act & Assert
         RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
             authServiceImpl.login(loginDto);
         });

@@ -35,23 +35,14 @@ public class ImpostoDto {
         return nome;
     }
 
-    public void setNomeImposto(TipoImposto nome) {
-        this.nome = nome;
-    }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
 
     public Double getAliquota() {
         return aliquota;
     }
 
-    public void setAliquota(Double aliquota) {
-        this.aliquota = aliquota;
-    }
 }

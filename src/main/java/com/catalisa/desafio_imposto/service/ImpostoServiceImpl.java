@@ -46,7 +46,7 @@ public class ImpostoServiceImpl implements ImpostoService{
         return impostoRepository.save(imposto);
     }
 
-    private void validarImposto(Imposto imposto) {
+    public void validarImposto(Imposto imposto) {
         if (imposto.getNome() == null || imposto.getNome().name().isEmpty()) {
             throw new IllegalArgumentException("O nome do imposto é obrigatório.");
         }
@@ -92,7 +92,6 @@ public class ImpostoServiceImpl implements ImpostoService{
             default:
                 throw new IllegalArgumentException("Tipo de imposto não suportado");
         }
-
 
         CalculoImpostoResponse response = new CalculoImpostoResponse();
         response.setTipoImposto(imposto.getNome().name());
