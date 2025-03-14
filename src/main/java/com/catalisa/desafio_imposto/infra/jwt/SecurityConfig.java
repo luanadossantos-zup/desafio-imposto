@@ -10,6 +10,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableMethodSecurity
 @AllArgsConstructor
+@EnableWebSecurity
 public class SecurityConfig {
 
     private UserDetailsService userDetailsService;
@@ -39,6 +41,7 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
+                    authorize.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll();
                     authorize.requestMatchers("/user/register").permitAll();
                     authorize.requestMatchers("/user/login").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/tipos").authenticated();
