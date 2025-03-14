@@ -72,3 +72,10 @@
   
   ### **CalculoController**
   - **POST /calculo**: Requer autenticação.
+  
+  ---
+  
+   ## :ledger: Documentação da API
+  A documentação completa da API está disponível no Swagger. Acesse:
+  [http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/)
+  
